@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Weather App</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+<style>
+	.container {
+		max-width: 500px;
+		margin: 0 auto;
+		padding: 20px;
+		background-color: #f2f2f2;
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+	}
+	
+	.location {
+		text-align: center;
+		margin-bottom: 20px;
+	}
+	
+	.weather {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+	
+	.temperature {
+		font-size: 60px;
+		font-weight: bold;
+	}
+	
+	.unit {
+		font-size: 24px;
+	}
+	
+	.description {
+		display: flex;
+		align-items: center;
+	}
+	
+	.icon {
+		width: 60px;
+		height: 60px;
+		margin-left: 20px;
+	}
+	
+</style>
+
+
+</head>
+<body>
+	<div class="container">
+		<div class="location">
+			<h1 class="city"></h1>
+			<h3 class="country"></h3>
+		</div>
+		<div class="weather">
+			<div class="temperature">
+				<h2 class="temp"></h2>
+				<span class="unit">&deg;C</span>
+			</div>
+			<div class="description">
+				<h3 class="desc"></h3>
+				<img class="icon" src="" alt="weather icon">
+			</div>
+		</div>
+	</div>
+
+	<script>
+		const api = {
+			key: "YOUR_API_KEY",
+			baseUrl: "https://api.openweathermap.org/data/2.5/"
+		}
+		
+		const location = document.querySelector('.location');
+		const city = document.querySelector('.city');
+		const country = document.querySelector('.country');
+		const temp = document.querySelector('.temp');
+		const desc = document.querySelector('.desc');
+		const icon = document.querySelector('.icon');
+		
+		function fetchWeather(cityName) {
+			fetch(`${api.baseUrl}weather?q=${cityName}&units=metric&appid=${api.key}`)
+				.then(response => response.json())
+				.then(data => displayWeather(data))
+				.catch(error => console.log(error));
+		}
+		
+		function displayWeather(data) {
+			city.innerText = `${data.name}`;
+			country.innerText = `${data.sys.country}`;
+			temp.innerText = `${Math.round(data.main.temp)}`;
+			desc.innerText = `${data.weather[0].description}`;
+			icon.src = `http://openweathermap.org/img/w/${data.weather[0].icon}.png`;
+		}
+		
+		fetchWeather('London');
+		
+	</script>
+</body>
+</html>
